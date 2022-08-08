@@ -19,7 +19,10 @@ const productSchema = new mongoose.Schema({
     type: Number,
     required: [true, "Each product shoud have a price"],
   },
-  imageCover: String,
+  imageCover: {
+    type: String,
+    default: "",
+  },
   images: [String],
   brand: {
     type: String,
