@@ -33,7 +33,7 @@ const getAllProducts = AsyncHandler(async (req, res, next) => {
 
 const getProduct = AsyncHandler(async (req, res, next) => {
   const productId = req.params.id;
-  const product = await Product.findById(productId);
+  const product = await Product.findById(productId).populate("reviews");
 
   if (!product) {
     return next(new AppError("There is no product with this id", 404));
