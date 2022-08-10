@@ -8,6 +8,7 @@ const ErrorHandler = require("./utilities/ErrorHandler");
 const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
+const categoryRoutes = require("./routes/categoryRoutes");
 
 const { protect, restrictedTo } = require("./controllers/authController");
 
@@ -30,6 +31,7 @@ app.use(xss());
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/reviews", reviewRoutes);
+app.use("/api/v1/categories", categoryRoutes);
 
 app.get("/api/v1/bla", protect, restrictedTo("admin"), (req, res) => {
   res.send({

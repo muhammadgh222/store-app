@@ -1,23 +1,31 @@
 const Review = require("../models/reviewModel");
-const AppError = require("../utilities/AppError");
 const AsyncHandler = require("../utilities/AsyncHandler");
+const {
+  deleteOne,
+  updateOne,
+  createOne,
+  getOne,
+  getAll,
+} = require("./handleFactory");
 
-const getAllReviews = AsyncHandler(async (req, res, next) => {
-  const reviews = await Review.find({});
+const setProductUserIds = (req, res, next) => {
+  // Allow nested routes
+  if (!req.body.product) req.body.product = req.params.productId;
+  if (!req.body.user) req.body.user = req.user.id;
+  next();
+};
 
-  res.status(200).json({
-    status: "success",
-    reviews,
-  });
-});
+const getAllReviews = getAll(Review);
+const getReview = getOne(Review);
+const createReview = createOne(Review);
+const updateReview = updateOne(Review);
+const deleteReview = deleteOne(Review);
 
-const createReview = AsyncHandler(async (req, res, next) => {
-  const review = await Review.create(req.body);
-
-  res.status(201).json({
-    status: "success",
-    review,
-  });
-});
-
-module.exports = { getAllReviews, createReview };
+module.exports = {
+  getAllReviews,
+  createReview,
+  getReview,
+  updateReview,
+  deleteReview,
+  setProductUserIds,
+};

@@ -1,6 +1,7 @@
 const User = require("../models/userModel");
 const AppError = require("../utilities/AppError");
 const AsyncHandler = require("../utilities/AsyncHandler");
+const { getOne } = require("./handleFactory");
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
@@ -35,4 +36,12 @@ const deleteMe = AsyncHandler(async (req, res, next) => {
     data: null,
   });
 });
-module.exports = { updateMe, deleteMe };
+
+const getMe = AsyncHandler(async (req, res, next) => {
+  req.params.id = req.user.id;
+  next();
+});
+
+const getUser = getOne(User);
+
+module.exports = { updateMe, deleteMe, getMe, getUser };

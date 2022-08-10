@@ -28,7 +28,6 @@ const productSchema = new mongoose.Schema(
     brand: {
       type: String,
     },
-    category: String, //Temporary
     countInStock: {
       type: Number,
       required: true,
@@ -49,6 +48,11 @@ const productSchema = new mongoose.Schema(
       type: Date,
       default: Date.now(),
     },
+    category: {
+      type: mongoose.Schema.ObjectId,
+      ref: "Category",
+      required: [true, "A product must be categorized"],
+    },
   },
   {
     toJSON: { virtuals: true },
@@ -60,6 +64,14 @@ productSchema.virtual("reviews", {
   ref: "Review",
   foreignField: "product",
   localField: "_id",
+});
+
+productSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "category",
+    select: "name",
+  });
+  next();
 });
 
 const Product = mongoose.model("Product", productSchema);
